@@ -12,10 +12,12 @@ class Board():
         
 
     def __init__(self) -> None:
-        self.print_table_to_console(Board.board_table)
+        self.isWinner_field = False      
         self.actual_player_id = 1
+
+        self.print_table_to_console(Board.board_table)
         self.table_states_collection=[Board.board_table]
-        self.next_round_player_steps(self.actual_player_id)        
+        self.next_round_player_steps(self.actual_player_id)  
         pass
 
     def print_table_to_console(self, next_table):
@@ -31,8 +33,12 @@ class Board():
             row_index += 1
 
     def next_round_player_steps(self, player_id):
-        print(f'Player_{player_id} round:')
+        print(f'Player_{player_id} round:')        
         step = input("#Type field (example: A3+enter)\n#Quit type Q+enter\n")
+
+        if(self.isWinner_field):
+            return
+
         if(step.upper()=="Q"):
             return
         
@@ -87,15 +93,63 @@ class Board():
         winner_row_state_x=["x","x","x"]
 
         for row in actual_player_board:
-            if(row == winner_row_state_o or row == winner_row_state_x):
-                print(f"WINNER is Player_{self.actual_player_id}")
+            is_rows_equal = row == winner_row_state_o or row == winner_row_state_x
+            if(is_rows_equal):
+                print(f"Rows WINNER is Player_{self.actual_player_id}")
+                self.isWinner_field  = is_rows_equal
+                break
 
-        #TODO:check columns
+        #check columns
+        for index, col  in enumerate(actual_player_board[0]):
+            col_one = (col == "o" or col == "x") and col == actual_player_board[1][index] and col == actual_player_board[2][index]
+            if(col_one):
+                print(f"Col WINNER is Player_{self.actual_player_id}")
+                self.isWinner_field = col_one
+                break
 
-        #TODO:check diagonal
+        #check diagonal
+        #FROM TOP LEFT TO RIGHT BOTTOM
+        isEqual_ltr_btn_d = actual_player_board[0][0]==actual_player_board[1][1] \
+                            and actual_player_board[1][1]==actual_player_board[2][2]
+        
+        for index in range(0,3):
+            isAll_o = winner_row_state_o[0] == actual_player_board[index][index]
+            isAll_x = winner_row_state_x[0] == actual_player_board[index][index]
+            if(isAll_o or isAll_x):
+                break
+
+        
+        #FROM BOTTOM LEFT TO RIGHT TOP:
+        for index_from_top, index_fom_down in enumerate(reversed(range(3)), range(3)):
+            isEqual_ltr_top_d = actual_player_board[index_from_top][index_fom_down]==actual_player_board[index_from_top -1][index_fom_down + 1]
+            if(not isEqual_ltr_top_d):
+                break
+
+        for index_from_top, index_fom_down in enumerate(reversed(range(3)), range(3)):
+            isAll_o_t = winner_row_state_o[0] == actual_player_board[index_from_top][index_fom_down]
+            isAll_x_t = winner_row_state_x[0] == actual_player_board[index_from_top][index_fom_down]
+
+
+    
+        # isEqual_ltr_top_d = actual_player_board[2][0]==actual_player_board[1][1] \
+        #                 and actual_player_board[1][1]==actual_player_board[0][2]
+
+        # isAll_o = winner_row_state_o[0] == actual_player_board[0][0] \
+        #     and winner_row_state_o[0] == actual_player_board[1][1]\
+        #     and winner_row_state_o[0] == actual_player_board[2][2] 
+    
+        # isAll_x = winner_row_state_x[0] == actual_player_board[0][0] \
+        #     and winner_row_state_x[0] == actual_player_board[1][1]\
+        #     and winner_row_state_x[0] == actual_player_board[2][2] 
+
+        is_diagonal_equal = isEqual_ltr_btn_d or isEqual_ltr_top_d
+        is_diagonal_O_or_X = isAll_o or isAll_x or isAll_o_t or isAll_x_t 
+        if(is_diagonal_equal and is_diagonal_O_or_X):
+            print(f"diag WINNER is Player_{self.actual_player_id}")
+            self.isWinner = is_diagonal_equal
 
         #print winnder, finish and save game
-        pass
+        
 
     def show_all_game_states(): 
         pass 
