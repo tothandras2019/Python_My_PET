@@ -1,4 +1,5 @@
-from TicTacToe import Board
+from GameTable import Board
+import sys
 
 # path = os.getcwd()
 # html_file=os.path.join("file:///", path,"index.html" )
@@ -22,12 +23,12 @@ class Main():
             user_input=input().upper()
             match (user_input):
                 case "Q":
-                    print('TERMINATE')
+                    print('Exit game')
+                    sys.exit(0)
                 case "1":
                     print("Tic Tac Toe Start")
                     Board()   
                 case "2":
-                    print("Any URL loader")
-    
-    
+                    print("Previous games results")
+                    
 Main()

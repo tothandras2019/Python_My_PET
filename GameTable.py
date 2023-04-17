@@ -1,3 +1,4 @@
+from Player import Player 
 import copy
 
 class Board():
@@ -8,17 +9,24 @@ class Board():
     
     row_dict = {"A":0, "B": 1, "C":2}
     column_dict = {"1":0, "2": 1, "3":2}
-
-        
+    
 
     def __init__(self) -> None:
         self.isWinner_field = False      
-        self.actual_player_id = 1
+        self.actual_player_id = 1  
+
+        #self.init_players()     
 
         self.print_table_to_console(Board.board_table)
         self.table_states_collection=[Board.board_table]
-        self.next_round_player_steps(self.actual_player_id)  
+        self.next_round_player_steps(self.actual_player_id)
         pass
+
+    def init_players(self):
+        self.players = {"0": "", "1":""}
+        for index in range(2):
+            name = input(f'Type Player_{index} name:\n:')
+            self.players[index]=Player(name)
 
     def print_table_to_console(self, next_table):
         col_string=[]
@@ -46,7 +54,7 @@ class Board():
             self.next_round_player_steps(player_id)
             return
 
-        self.save_actual_state(step, player_id)
+        self.save_actual_game_state(step, player_id)
 
     def check_player_input(self, step):
         row_alpha_helper=["A", "B", "C"]
@@ -60,7 +68,7 @@ class Board():
         
         return True
 
-    def save_actual_state(self, step, player_id):
+    def save_actual_game_state(self, step, player_id):
         '''ie: step = C1 takes o or x, for player'''
         row_= step[0]
         col_= step[1]
@@ -78,7 +86,7 @@ class Board():
 
         self.print_table_to_console(new_board_state)
         self.table_states_collection.append(new_board_state)
-        self.is_winner(new_board_state)
+        #self.is_winner(new_board_state)
 
         #NEXT round
         print("--------------------")
