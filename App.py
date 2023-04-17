@@ -10,7 +10,9 @@ import sys
 # louncher.open(html_file, 1, True)
 
 class Main():
-    activity=["1) Tic-Tack-Toe", "2) Any URL loader", "Q) EXIT"]
+    activity=["1) Tic-Tack-Toe", 
+              "2) Revious game results", 
+              "Q) EXIT"]
 
     def __init__(self) -> None:
         self.choose_task()
@@ -22,7 +24,7 @@ class Main():
             print("[MAIN]:Válasszon!\n", *Main.activity)
             user_input=input().upper()
             match (user_input):
-                case "Q":
+                case "Q ":
                     print('Exit game')
                     sys.exit(0)
                 case "1":
