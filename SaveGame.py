@@ -3,7 +3,12 @@ import json
 
 
 class SaveGame:
-    def save(game_state):
+    to_be_save = {}
+
+    def save(game_state, game):
+        SaveGame.to_be_save = game
+        print(game)
+        save_file = f'{game["players"][0]}-{game["players"][1]}_game_state.json'
         savefolder = "save"
         current_dir = os.getcwd()
 
@@ -11,11 +16,11 @@ class SaveGame:
             os.mkdir(savefolder)
             print(f"{savefolder} has been created!")
 
-        jsonFile = json.dumps(game_state)
-        with open(os.path.join(current_dir, savefolder, "game_state.json"), "wt") as file:
+        jsonFile = json.dumps(game)
+        with open(os.path.join(current_dir, savefolder, save_file), "wt") as file:
             file.write(jsonFile)
 
-    def load():
+    def load() -> list:
         file = "game_state.json"
         folder = "save"
 
@@ -26,7 +31,7 @@ class SaveGame:
 
             with open(os.path.join(current_dir, folder, file), "rt") as file:
                 data = json.loads(file.read())
-                print("DATA", data)
+                return data
 
         except FileNotFoundError as err:
             print("NO FOLDER:", err)

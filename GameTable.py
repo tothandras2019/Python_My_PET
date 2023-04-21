@@ -4,30 +4,38 @@ import copy
 
 
 class Board:
-    menu = ["#Type field (example: A3+enter)", "#Quit = Q", "#Save = S", "#Load game = L"]
+    menu = ["<--MENU-->", "\t#Type field (example: A3+enter) \t#Quit = Q \t#Save = S"]
     board_table = [["-", "-", "-"], ["-", "-", "-"], ["-", "-", "-"]]
 
     row_dict = {"A": 0, "B": 1, "C": 2}
-    column_dict = {"1": 0, "2": 1, "3": 2}
+    col_dict = {"1": 0, "2": 1, "3": 2}
 
-    def __init__(self) -> None:
+    def __init__(self, loaded_state=[]) -> None:
         self.isWinner_field = False
         self.players = {}
 
         self.init_players()
 
         self.actual_player_id = self.players[0].id
-        print("ID", self.players[0].id)
-
-        self.print_table_to_console(Board.board_table)
         self.table_states_collection = []
+        self.init_table(loaded_state)
 
-        self.next_round_player_steps(self.actual_player_id)
+        self.start_game()
+
+    def init_table(self, table):
+        if len(table) <= 0:
+            return
+
+        Board.board_table = table
 
     def init_players(self):
         for index in range(0, 2):
             name = input(f"Type Player_{index} name:\n:")
             self.players[index] = Player(name, index)
+
+    def start_game(self):
+        self.print_table_to_console(Board.board_table)
+        self.next_round_player_steps(self.actual_player_id)
 
     def print_table_to_console(self, next_table):
         col_string = []
@@ -47,20 +55,17 @@ class Board:
 
         print(f"Player: {self.players[player_id].name} round:")
         for msg in Board.menu:
-            print(msg)
+            print(f"{msg}")
 
         step = input(">>")
         step = step.upper()
 
-        if step == "S":
-            SaveGame.save(self.table_states_collection)
-            return
-        if step == "L":
-            SaveGame.load()
-            return
-
-        if step == "Q":
-            return
+        match step:
+            case "S":
+                self.save_game(self.table_states_collection)
+                return
+            case "Q":
+                return
 
         if not self.check_player_input(step):
             self.next_round_player_steps(player_id)
@@ -92,11 +97,11 @@ class Board:
 
         if player_id == 0:
             marker = "o"
-            new_board_state[Board.row_dict[f"{row_}"]][Board.column_dict[f"{col_}"]] = marker
+            new_board_state[Board.row_dict[f"{row_}"]][Board.col_dict[f"{col_}"]] = marker
 
         if player_id == 1:
             marker = "x"
-            new_board_state[Board.row_dict[f"{row_}"]][Board.column_dict[f"{col_}"]] = marker
+            new_board_state[Board.row_dict[f"{row_}"]][Board.col_dict[f"{col_}"]] = marker
 
         self.players[player_id].add_player_step(step)
         self.print_table_to_console(new_board_state)
@@ -148,7 +153,6 @@ class Board:
 
         for index in range(0, 3):
             isAll_o = mark_in_row_state[0] == actual_player_board[index][index]
-            # isAll_x = winner_row_state_x[0] == actual_player_board[index][index]
             if not isAll_o:
                 break
 
@@ -173,6 +177,7 @@ class Board:
 
         is_diagonal_equal = isEqual_ltr_btn_d or isEqual_ltr_top_d
         is_diagonal_O_or_X = isAll_o or isAll_o_t
+
         if is_diagonal_equal and is_diagonal_O_or_X:
             print(f"diag WINNER is Player_{self.actual_player_id}")
             self.isWinner = is_diagonal_equal
@@ -185,8 +190,14 @@ class Board:
         # actual_player_id stay!
         pass
 
-    def save_game_to_file():
-        pass
+    def save_game(self, game_board):
+        game = {"players": {}}
+        for key, player in self.players.items():
+            game["players"][key] = player.name
+
+        game["board"] = game_board
+
+        SaveGame.save(game_board, game)
 
 
 # boardMock = Board()
