@@ -1,5 +1,5 @@
 from GameTable import Board
-from SaveGame import SaveGame
+from SaveGame import GameManager
 import sys
 
 # path = os.getcwd()
@@ -39,7 +39,7 @@ class Main:
     def load_last_game(self):
         # TODO: initialize players on Board!
         try:
-            load_last_game_state = SaveGame.load()
+            load_last_game_state = GameManager.load()
             last_state = load_last_game_state[-1]
             Board(last_state)
         except IndexError as err:

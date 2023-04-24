@@ -1,5 +1,5 @@
 from Player import Player
-from SaveGame import SaveGame
+from SaveGame import GameManager
 import copy
 
 
@@ -197,7 +197,7 @@ class Board:
 
         game["board"] = game_board
 
-        SaveGame.save(game_board, game)
+        GameManager.save(game_board, game)
 
 
 # boardMock = Board()
