@@ -21,16 +21,19 @@ class Main:
     def choose_task(self):
         user_input = ""
         while user_input != "E":
-            print(">>", *Main.activity)
+            print(">>>", *Main.activity)
             user_input = input().upper()
             match (user_input):
                 case "1":
                     print("<--Tic Tac Toe starts-->")
+                    user_input = ""
                     Board()
                 case "2":
                     print("<--Previous games results-->")
+                    user_input = ""
                 case "3":
                     print("<--Load last game-->")
+                    user_input = ""
                     self.load_last_game()
                 case "E":
                     print("<--Exit game-->")
@@ -38,10 +41,15 @@ class Main:
 
     def load_last_game(self):
         # TODO: initialize players on Board!
+
         try:
-            load_last_game_state = GameManager.load()
-            last_state = load_last_game_state[-1]
-            Board(last_state)
+            # load_last_game_state = GameManager.load()
+            # last_state = load_last_game_state[-1]
+
+            load_last_game_state_with_players = GameManager.load_with_players()
+            players = load_last_game_state_with_players[0]
+            board = load_last_game_state_with_players[1]
+            Board(board[-1], players)
         except IndexError as err:
             print("There is no earlier game!")
 

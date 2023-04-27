@@ -6,15 +6,17 @@ import copy
 class Board:
     menu = ["<--MENU-->", "\t#Type field (example: A3+enter) \t#Quit = Q \t#Save = S"]
     board_table = [["-", "-", "-"], ["-", "-", "-"], ["-", "-", "-"]]
+    reset_table = [["-", "-", "-"], ["-", "-", "-"], ["-", "-", "-"]]
 
     row_dict = {"A": 0, "B": 1, "C": 2}
     col_dict = {"1": 0, "2": 1, "3": 2}
 
-    def __init__(self, loaded_state=[]) -> None:
+    def __init__(self, loaded_state=[], players={}) -> None:
         self.isWinner_field = False
-        self.players = {}
+        self.players = players
 
-        self.init_players()
+        if not self.players:
+            self.init_players()
 
         self.actual_player_id = self.players[0].id
         self.table_states_collection = []
@@ -63,8 +65,12 @@ class Board:
         match step:
             case "S":
                 self.save_game(self.table_states_collection)
+                Board.board_table = Board.reset_table
+                self.players = {}
                 return
             case "Q":
+                Board.board_table = Board.reset_table
+                self.players = {}
                 return
 
         if not self.check_player_input(step):
