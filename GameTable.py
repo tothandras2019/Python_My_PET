@@ -127,11 +127,14 @@ class Board:
         else:
             mark_in_row_state = ["x", "x", "x"]
 
+        player_name = self.players[self.actual_player_id].name
+
         # region check rows:
         for row in actual_player_board:
             is_rows_equal = row == mark_in_row_state
             if is_rows_equal:
-                print(f"Rows WINNER is Player_{self.actual_player_id}")
+                print(f"Rows WINNER is {player_name}!!!!")
+                # print(f"Rows WINNER is Player_{self.actual_player_id}")
                 self.isWinner_field = is_rows_equal
                 break
         # endregion
@@ -144,7 +147,7 @@ class Board:
                 and col == actual_player_board[2][index]
             )
             if col_one:
-                print(f"Col WINNER is Player_{self.actual_player_id}")
+                print(f"Col WINNER is {player_name}!!!!")
                 self.isWinner_field = col_one
                 break
 
