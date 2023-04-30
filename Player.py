@@ -11,10 +11,9 @@ class Player:
         self.set_player()
 
     def set_player(self) -> None:
-        input_player_name = input("Kérem a nevét>")
+        input_player_name = input("Kérem a nevét >> ")
         self.name = input_player_name
 
-        
         Client(self)
 
     def add_player_step(self):
