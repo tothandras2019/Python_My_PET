@@ -1,6 +1,6 @@
 import os
 import json
-from Player import Player
+from player import Player
 
 
 class GameManager:

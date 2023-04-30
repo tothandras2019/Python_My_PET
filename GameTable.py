@@ -1,4 +1,4 @@
-from Player import Player
+from player import Player
 from SaveGame import GameManager
 import copy
 
@@ -73,13 +73,13 @@ class Board:
                 self.players = {}
                 return
 
-        if not self.check_player_input(step):
+        if not self.validate_player_step(step):
             self.next_round_player_steps(player_id)
             return
 
         self.save_actual_game_state(step, player_id)
 
-    def check_player_input(self, step):
+    def validate_player_step(self, step):
         row_alpha_helper = ["A", "B", "C"]
         if step[0] not in row_alpha_helper:
             print("-----wrong row!-----".upper())
